@@ -69,6 +69,23 @@ public class JSONUtils {
         return ingredients;
     }
 
+    public static String getIngredientNamesFromJSON(JSONObject recipe) throws JSONException {
+
+        JSONArray ingredientArray= recipe.getJSONArray("ingredients");
+
+        String ingredients = "";
+
+        for(int i =0; i< ingredientArray.length();i++){
+            JSONObject ingredientObj = ingredientArray.getJSONObject(i);
+            String ingredient = ingredientObj.getString("ingredient");
+
+            ingredients+= (i+1) + ". " + ingredient + "\n";
+
+        }
+
+        return ingredients;
+    }
+
     public static String[] getStepsFromJSON(JSONObject recipe) throws JSONException {
 
         JSONArray stepArray= recipe.getJSONArray("steps");
