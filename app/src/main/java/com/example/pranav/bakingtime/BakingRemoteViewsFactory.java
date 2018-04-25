@@ -1,6 +1,8 @@
 package com.example.pranav.bakingtime;
 
 import android.content.Context;
+import android.content.Intent;
+import android.os.Bundle;
 import android.util.Log;
 import android.widget.RemoteViews;
 import android.widget.RemoteViewsService;
@@ -87,6 +89,11 @@ public class BakingRemoteViewsFactory implements RemoteViewsService.RemoteViewsF
         views.setTextViewText(R.id.tv_recipe_name, name);
         views.setTextViewText(R.id.tv_ingredients, ingredients);
 
+
+        Bundle b = new Bundle();
+        Intent intent = new Intent();
+        intent.putExtras(b);
+        views.setOnClickFillInIntent(R.id.ll_widget_list_item,intent);
         return views;
 
     }
