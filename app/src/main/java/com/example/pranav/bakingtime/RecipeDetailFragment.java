@@ -22,6 +22,7 @@ public class RecipeDetailFragment extends Fragment implements RecipeDetailAdapte
 
 
     private JSONObject mRecipe;
+    private boolean mTwoPane;
     OnClickPassListener mOnClickPassListener;
 
     interface OnClickPassListener{
@@ -48,6 +49,8 @@ public class RecipeDetailFragment extends Fragment implements RecipeDetailAdapte
     void setRecipeObject(JSONObject recipe){
         mRecipe = recipe;
     }
+
+    void setTwoPane(boolean isTwoPane){ mTwoPane = isTwoPane;}
 
 
 
@@ -86,7 +89,7 @@ public class RecipeDetailFragment extends Fragment implements RecipeDetailAdapte
 
         RecyclerView recyclerView = (RecyclerView) rootView.findViewById(R.id.recipe_step_list_recyclerview);
 
-        RecipeDetailAdapter mAdapter = new RecipeDetailAdapter(ingredients,steps, this);
+        RecipeDetailAdapter mAdapter = new RecipeDetailAdapter(ingredients,steps,mTwoPane, this);
 
         LinearLayoutManager layoutManager = new LinearLayoutManager(getContext(),LinearLayoutManager.VERTICAL, false);
 

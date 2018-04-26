@@ -16,17 +16,20 @@ public class RecipeDetailAdapter extends RecyclerView.Adapter<RecipeDetailAdapte
     private String mIngredients;
     private String[] mSteps;
 
+    private boolean mTwoPane;
+
     OnStepClickListener mStepClickListener;
-    int mClickedPosition;
+    int mClickedPosition =1 ;
 
     interface OnStepClickListener{
 
         void onStepClick(int position);
     }
 
-    RecipeDetailAdapter(String ingredients, String[] steps, OnStepClickListener mPassingListener){
+    RecipeDetailAdapter(String ingredients, String[] steps,boolean isTwoPane, OnStepClickListener mPassingListener){
         mIngredients = ingredients;
         mSteps = steps;
+        mTwoPane = isTwoPane;
         mStepClickListener = mPassingListener;
         notifyDataSetChanged();
     }
@@ -45,30 +48,35 @@ public class RecipeDetailAdapter extends RecyclerView.Adapter<RecipeDetailAdapte
 
     @Override
     public void onBindViewHolder(RecipeStepsViewHolder holder, int position) {
-        if(position == 0){
+
+        if(mTwoPane) {
+
+            if (mClickedPosition == position)  {
+                holder.itemView.setBackgroundColor(holder.itemView.getContext().getResources().getColor(R.color.colorAccent));
+            } else {
+                holder.itemView.setBackgroundColor(holder.itemView.getContext().getResources().getColor(R.color.holo_blue_light));
+            }
+        }
+
+        if(position == 0) {
             holder.mIngredientHead.setText("Ingredients:");
             holder.mIngredientHead.setTextSize(25);
-            holder.mIngredientHead.setPadding(20,0,0,20);
+            holder.mIngredientHead.setPadding(20, 0, 0, 20);
             holder.mIngredientHead.setVisibility(View.VISIBLE);
             holder.mStepTextView.setText(mIngredients);
             holder.itemView.setBackgroundColor(holder.itemView.getContext().getResources().getColor(R.color.colorPrimary));
             holder.mStepTextView.setTextSize(15);
+            holder.mCounterTextView.setVisibility(View.INVISIBLE);
             return;
         }
 
-        holder.mIngredientHead.setVisibility(View.GONE);
 
-        if(mClickedPosition==position){
-            holder.itemView.setBackgroundColor(holder.itemView.getContext().getResources().getColor(R.color.colorAccent));
-        }else{
-            holder.itemView.setBackgroundColor(holder.itemView.getContext().getResources().getColor(R.color.holo_blue_light));
-        }
-
-        String step = mSteps[position-1];
-        Log.d(TAG, "onBindViewHolder: " + step);
-        holder.mStepTextView.setText(step);
-        holder.mCounterTextView.setText(""+ position);
-        holder.mCounterTextView.setVisibility(View.VISIBLE);
+            holder.mIngredientHead.setVisibility(View.GONE);
+            String step = mSteps[position - 1];
+            Log.d(TAG, "onBindViewHolder: " + step);
+            holder.mStepTextView.setText(step);
+            holder.mCounterTextView.setText("" + position);
+            holder.mCounterTextView.setVisibility(View.VISIBLE);
 
 
     }

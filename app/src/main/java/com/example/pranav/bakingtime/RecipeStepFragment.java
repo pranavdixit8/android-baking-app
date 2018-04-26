@@ -119,15 +119,17 @@ public class RecipeStepFragment extends android.support.v4.app.Fragment {
 
     private void setExoplayer(String videoUrl, String thumbnailUrl) {
 
-        String stringUrl=(videoUrl == "" || videoUrl == null)?thumbnailUrl:videoUrl;
+        String stringUrl=(videoUrl.isEmpty() || videoUrl == null)?thumbnailUrl:videoUrl;
 
-        if(stringUrl=="" || stringUrl ==null){
+        if(stringUrl.isEmpty() || stringUrl ==null){
             return;
         }
 
         Uri uri = Uri.parse(stringUrl);
 
         if (mPlayer == null) {
+
+            Log.d(TAG, "setExoplayer: ");
 
             TrackSelector trackSelector = new DefaultTrackSelector();
             LoadControl loadControl = new DefaultLoadControl();
@@ -150,8 +152,8 @@ public class RecipeStepFragment extends android.support.v4.app.Fragment {
     void setRecipeObject(JSONObject recipe){
         mRecipe = recipe;
     }
-    void setTwoPane(){
-        mTwoPane = true;
+    void setTwoPane(boolean isTwoPane){
+        mTwoPane = isTwoPane;
     }
 
     @Override

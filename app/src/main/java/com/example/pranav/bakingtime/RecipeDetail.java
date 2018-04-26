@@ -56,6 +56,7 @@ public class RecipeDetail extends AppCompatActivity implements RecipeDetailFragm
 
                 fragment.setRecipeObject(mRecipe);
                 fragment.setOnStepClickListener(this);
+                fragment.setTwoPane(mTwoPane);
 
                 FragmentManager fragmentManager = getSupportFragmentManager();
 
@@ -69,7 +70,7 @@ public class RecipeDetail extends AppCompatActivity implements RecipeDetailFragm
                     RecipeStepFragment stepFragment = new RecipeStepFragment();
                     stepFragment.setRecipeObject(mRecipe);
                     stepFragment.setStepNumber(mStepNumber);
-                    stepFragment.setTwoPane();
+                    stepFragment.setTwoPane(true);
 
 
                     fragmentManager.beginTransaction()
@@ -98,7 +99,7 @@ public class RecipeDetail extends AppCompatActivity implements RecipeDetailFragm
             RecipeStepFragment stepFragment = new RecipeStepFragment();
             stepFragment.setRecipeObject(mRecipe);
             stepFragment.setStepNumber(mStepNumber);
-            stepFragment.setTwoPane();
+            stepFragment.setTwoPane(true);
 
             FragmentManager fragmentManager = getSupportFragmentManager();
 
