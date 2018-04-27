@@ -18,17 +18,13 @@ public class NetworkUtils {
 
 
     public static URL buildRecipeStepVideoURL(String stepURL){
-
-        Uri uri = Uri.parse(stepURL).buildUpon()
-                .build();
-
+        Uri uri = Uri.parse(stepURL).buildUpon().build();
         URL url =null;
         try {
             url = new URL(uri.toString());
         } catch (MalformedURLException e) {
             e.printStackTrace();
         }
-
         return url;
     }
 
@@ -37,8 +33,8 @@ public class NetworkUtils {
         Uri uri = Uri.parse(BAKINGDB_BASE).buildUpon()
                 .appendPath(JSON_TOKEN)
                 .build();
-        URL url = null;
 
+        URL url = null;
         try {
             url = new URL(uri.toString());
         } catch (MalformedURLException e) {
@@ -46,6 +42,8 @@ public class NetworkUtils {
         }
         return url;
     }
+
+
 
     public static String getResponseFromAPI(URL url) throws IOException {
         HttpURLConnection urlConnection = (HttpURLConnection) url.openConnection();

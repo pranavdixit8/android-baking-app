@@ -37,6 +37,11 @@ import static android.content.res.Configuration.ORIENTATION_LANDSCAPE;
 public class RecipeStepFragment extends android.support.v4.app.Fragment {
 
     private static final String TAG = RecipeStepFragment.class.getSimpleName();
+    private static final String IS_TWO_PANE = "isTwoPane" ;
+    private static final String DESCRIPTION_KEY = "description";
+    private static final String VIDEO_URL_KEY = "videoURL";
+    private static final String THUMBNAIL_URL_KEY = "thumbnailURL";
+    private static final String APPLICATION_NAME = "BakingTime";
 
     int mStepNumber;
     private JSONObject mRecipe;
@@ -57,14 +62,14 @@ public class RecipeStepFragment extends android.support.v4.app.Fragment {
         final View rootView = inflater.inflate(R.layout.fragment_step_detail, container, false);
 
         if(savedInstanceState!=null){
-            String jsonString = savedInstanceState.getString("jsonString");
-            mStepNumber = savedInstanceState.getInt("stepNumber");
+            String jsonString = savedInstanceState.getString(Recipe.JSON_STRING);
+            mStepNumber = savedInstanceState.getInt(RecipeDetail.STEP_NUMBER);
             try {
                 mRecipe = new JSONObject(jsonString);
             } catch (JSONException e) {
                 e.printStackTrace();
             }
-            mTwoPane = savedInstanceState.getBoolean("isTwoPane");
+            mTwoPane = savedInstanceState.getBoolean(IS_TWO_PANE);
         }
 
         mPlayerView = rootView.findViewById(R.id.sepv_media_player);
@@ -75,17 +80,13 @@ public class RecipeStepFragment extends android.support.v4.app.Fragment {
         String videoUrl = null;
         String thumbnailUrl = null;
         try {
-            description = JSONUtils.getStepInfoFromKey(mRecipe, mStepNumber, "description");
-            videoUrl = JSONUtils.getStepInfoFromKey(mRecipe, mStepNumber, "videoURL");
-            thumbnailUrl = JSONUtils.getStepInfoFromKey(mRecipe, mStepNumber, "thumbnailURL");
+            description = JSONUtils.getStepInfoFromKey(mRecipe, mStepNumber,DESCRIPTION_KEY);
+            videoUrl = JSONUtils.getStepInfoFromKey(mRecipe, mStepNumber, VIDEO_URL_KEY);
+            thumbnailUrl = JSONUtils.getStepInfoFromKey(mRecipe, mStepNumber, THUMBNAIL_URL_KEY);
         } catch (JSONException e) {
             e.printStackTrace();
         }
 
-
-
-        Log.d(TAG, "onCreateView: " + videoUrl);
-        Log.d(TAG, "onCreateView:  " + description);
 
         mPlayerView.setDefaultArtwork(BitmapFactory.decodeResource(getResources(),R.drawable.exo_controls_next));
 
@@ -103,7 +104,6 @@ public class RecipeStepFragment extends android.support.v4.app.Fragment {
         button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
                 mButtonCallBack.onButtonClick();
 
             }
@@ -129,14 +129,12 @@ public class RecipeStepFragment extends android.support.v4.app.Fragment {
 
         if (mPlayer == null) {
 
-            Log.d(TAG, "setExoplayer: ");
-
             TrackSelector trackSelector = new DefaultTrackSelector();
             LoadControl loadControl = new DefaultLoadControl();
             mPlayer = ExoPlayerFactory.newSimpleInstance(getContext(), trackSelector, loadControl);
             mPlayerView.setPlayer(mPlayer);
 
-            String agent = Util.getUserAgent(getContext(),"BakingTime");
+            String agent = Util.getUserAgent(getContext(),APPLICATION_NAME);
             MediaSource mediaSource = new ExtractorMediaSource(uri, new DefaultDataSourceFactory(getContext(), agent)
                     , new DefaultExtractorsFactory(), null, null);
             mPlayer.prepare(mediaSource);
@@ -158,9 +156,9 @@ public class RecipeStepFragment extends android.support.v4.app.Fragment {
 
     @Override
     public void onSaveInstanceState(Bundle outState) {
-        outState.putString("jsonString", mRecipe.toString());
-        outState.putInt("stepNumber", mStepNumber);
-        outState.putBoolean("isTwoPane", mTwoPane);
+        outState.putString(Recipe.JSON_STRING, mRecipe.toString());
+        outState.putInt(RecipeDetail.STEP_NUMBER, mStepNumber);
+        outState.putBoolean(IS_TWO_PANE, mTwoPane);
     }
 
     @Override

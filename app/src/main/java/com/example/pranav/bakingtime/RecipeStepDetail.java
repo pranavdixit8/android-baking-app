@@ -16,8 +16,6 @@ public class RecipeStepDetail extends AppCompatActivity implements RecipeStepFra
     int mPosition;
     int mNumSteps;
 
-
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -27,10 +25,8 @@ public class RecipeStepDetail extends AppCompatActivity implements RecipeStepFra
 
         if(intent!=null) {
 
-            String jsonString = intent.getStringExtra("jsonObject");
-            mPosition = intent.getIntExtra("stepNumber", 1);
-
-
+            String jsonString = intent.getStringExtra(Recipe.JSON_STRING);
+            mPosition = intent.getIntExtra(RecipeDetail.STEP_NUMBER, 1);
             try {
                 mRecipeObject = new JSONObject(jsonString);
                 mNumSteps = JSONUtils.numStepsRecipe(mRecipeObject);
@@ -38,7 +34,6 @@ public class RecipeStepDetail extends AppCompatActivity implements RecipeStepFra
             } catch (JSONException e) {
                 e.printStackTrace();
             }
-
 
             RecipeStepFragment fragment = new RecipeStepFragment();
             fragment.setRecipeObject(mRecipeObject);

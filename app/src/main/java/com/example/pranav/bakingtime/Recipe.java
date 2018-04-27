@@ -1,6 +1,10 @@
 package com.example.pranav.bakingtime;
 
 import android.content.Intent;
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
+import android.support.annotation.VisibleForTesting;
+import android.support.test.espresso.IdlingResource;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.AsyncTaskLoader;
 import android.support.v4.content.Loader;
@@ -22,6 +26,9 @@ import java.net.URL;
 public class Recipe extends AppCompatActivity implements LoaderManager.LoaderCallbacks<JSONArray> , RecipeAdapter.RecipeNameOnClickListener {
 
     private static final String TAG = Recipe.class.getSimpleName();
+
+    public static final String JSON_STRING = "jsonObject";
+
 
     private static final int RECIPE_LOADER_ID = 1 ;
     private RecyclerView mRecylerView;
@@ -45,8 +52,6 @@ public class Recipe extends AppCompatActivity implements LoaderManager.LoaderCal
 
         mRecylerView.setAdapter(mRecipeAdapter);
 
-//        LoaderManager.LoaderCallbacks<String[]> callback = this;
-
         LoaderManager loaderManager = getSupportLoaderManager();
         Loader<String> githubSearchLoader = loaderManager.getLoader(RECIPE_LOADER_ID);
         if (githubSearchLoader == null) {
@@ -55,13 +60,14 @@ public class Recipe extends AppCompatActivity implements LoaderManager.LoaderCal
             loaderManager.restartLoader(RECIPE_LOADER_ID, null, this);
         }
 
-//        getSupportLoaderManager().initLoader(loaderId, null, callback);
     }
 
 
     @Override
     public Loader<JSONArray> onCreateLoader(int i, Bundle bundle) {
         return new AsyncTaskLoader<JSONArray>(this) {
+
+
 
             JSONArray mRecipeArray = null;
             @Override
@@ -81,7 +87,6 @@ public class Recipe extends AppCompatActivity implements LoaderManager.LoaderCal
                 try {
                     String jsonResponse = NetworkUtils.getResponseFromAPI(url);
                     JSONArray recipeArray = JSONUtils.getRecipeDetails(jsonResponse);
-                    Log.d(TAG, "loadInBackground: " +recipeArray.length());
                     return recipeArray;
                 } catch (Exception e) {
                     e.printStackTrace();
@@ -98,8 +103,6 @@ public class Recipe extends AppCompatActivity implements LoaderManager.LoaderCal
     }
 
 
-
-
     @Override
     protected void onResume() {
         super.onResume();
@@ -109,10 +112,7 @@ public class Recipe extends AppCompatActivity implements LoaderManager.LoaderCal
     @Override
     public void onLoadFinished(Loader<JSONArray> loader, JSONArray data) {
 
-        Log.d(TAG, "onLoadFinished: " +data.length());
-
         mRecipeAdapter.mRecipes = data;
-
         mRecipeAdapter.notifyDataSetChanged();
 
     }
@@ -125,10 +125,9 @@ public class Recipe extends AppCompatActivity implements LoaderManager.LoaderCal
 
     @Override
     public void onClick(JSONObject recipe) {
-
         String recipeString = recipe.toString();
         Intent intent = new Intent(Recipe.this, RecipeDetail.class);
-        intent.putExtra("jsonObject", recipeString);
+        intent.putExtra(JSON_STRING, recipeString);
 
         startActivity(intent);
 
