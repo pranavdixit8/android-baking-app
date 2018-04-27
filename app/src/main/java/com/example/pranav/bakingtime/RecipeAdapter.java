@@ -10,6 +10,8 @@ import android.view.ViewGroup;
 import android.widget.Adapter;
 import android.widget.TextView;
 
+import com.example.pranav.bakingtime.utils.JSONUtils;
+
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -22,8 +24,7 @@ public class RecipeAdapter extends RecyclerView.Adapter<RecipeAdapter.RecipeView
 
     private RecipeNameOnClickListener mOnClickListener;
     JSONArray mRecipes;
-//    Context mContext;
-//
+
     RecipeAdapter(RecipeNameOnClickListener listener){
 
         mOnClickListener = listener;
@@ -61,8 +62,7 @@ public class RecipeAdapter extends RecyclerView.Adapter<RecipeAdapter.RecipeView
 
         try {
             JSONObject recipeObject = mRecipes.getJSONObject(position);
-            String recipeName = recipeObject.getString("name");
-            Log.d(TAG, "onBindViewHolder: " + recipeName);
+            String recipeName = JSONUtils.getRecipesNameJSON(recipeObject);
             holder.mRecipeTextView.setText(recipeName);
         } catch (JSONException e) {
             e.printStackTrace();
@@ -71,8 +71,6 @@ public class RecipeAdapter extends RecyclerView.Adapter<RecipeAdapter.RecipeView
 
     @Override
     public int getItemCount() {
-
-        Log.d(TAG, "getItemCount: " + mRecipes);
 
         if(mRecipes==null)return 0;
         else return mRecipes.length();
