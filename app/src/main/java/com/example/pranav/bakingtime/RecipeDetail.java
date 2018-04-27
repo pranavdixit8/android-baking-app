@@ -17,13 +17,12 @@ import org.json.JSONObject;
 
 public class RecipeDetail extends AppCompatActivity implements RecipeDetailFragment.OnClickPassListener {
 
-
     private static final String TAG = RecipeDetail.class.getSimpleName();
+    public static final String STEP_NUMBER = "stepNumber";
 
     private JSONObject mRecipe;
     private int mStepNumber =1;
     boolean mTwoPane;
-//    RecipeDetailAdapter.OnStepClickListener mPassingListener;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -33,22 +32,18 @@ public class RecipeDetail extends AppCompatActivity implements RecipeDetailFragm
 
         if(findViewById(R.id.recipe_step_detail_linear_layout) !=null){
             mTwoPane = true;
-            Log.d(TAG, "onCreate: " + mTwoPane);
         }else mTwoPane =false;
 
 
         Intent intent = getIntent();
-        if(intent!=null && intent.hasExtra("jsonObject")){
+        if(intent!=null && intent.hasExtra(Recipe.JSON_STRING)){
 
-            String recipeString = intent.getStringExtra("jsonObject");
-
+            String recipeString = intent.getStringExtra(Recipe.JSON_STRING);
             try {
                 mRecipe = new JSONObject(recipeString);
             } catch (JSONException e) {
                 e.printStackTrace();
             }
-
-            Log.d(TAG, "onCreate: " + recipeString);
 
             if(savedInstanceState==null) {
 
@@ -72,15 +67,11 @@ public class RecipeDetail extends AppCompatActivity implements RecipeDetailFragm
                     stepFragment.setStepNumber(mStepNumber);
                     stepFragment.setTwoPane(true);
 
-
                     fragmentManager.beginTransaction()
                             .add(R.id.single_step_container, stepFragment)
                             .commit();
 
-
                 }
-
-
             }
         }
     }
@@ -90,12 +81,10 @@ public class RecipeDetail extends AppCompatActivity implements RecipeDetailFragm
     @Override
     public void onClick(int position) {
 
-        Log.d(TAG, "onClick: " + position);
         if(position<1)return;
-        Log.d(TAG, "onClick2: " + position);
+
         if(mTwoPane){
             mStepNumber = position;
-
             RecipeStepFragment stepFragment = new RecipeStepFragment();
             stepFragment.setRecipeObject(mRecipe);
             stepFragment.setStepNumber(mStepNumber);
@@ -106,16 +95,11 @@ public class RecipeDetail extends AppCompatActivity implements RecipeDetailFragm
             fragmentManager.beginTransaction()
                     .replace(R.id.single_step_container, stepFragment)
                     .commit();
-
-        }else{
-
+        }else
+            {
             Intent intent = new Intent(this, RecipeStepDetail.class);
-
-
-            intent.putExtra("jsonObject", mRecipe.toString());
-            intent.putExtra("stepNumber", position);
-
-
+            intent.putExtra(Recipe.JSON_STRING, mRecipe.toString());
+            intent.putExtra(STEP_NUMBER, position);
             startActivity(intent);
         }
 
