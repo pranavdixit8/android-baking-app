@@ -30,14 +30,11 @@ public class BakingRemoteViewsFactory implements RemoteViewsService.RemoteViewsF
     @Override
     public void onCreate() {
 
-        Log.d(TAG, "onCreate: ");
 
     }
 
     @Override
     public void onDataSetChanged() {
-
-        Log.d(TAG, "onDataSetChanged: " );
 
         URL url = NetworkUtils.buildURL();
         try {
@@ -54,21 +51,17 @@ public class BakingRemoteViewsFactory implements RemoteViewsService.RemoteViewsF
     @Override
     public void onDestroy() {
 
-        Log.d(TAG, "onDestroy: ");
 
     }
 
     @Override
     public int getCount() {
-        Log.d(TAG, "getCount: ");
         if(mRecipes==null)return 0;
         return mRecipes.length();
     }
 
     @Override
     public RemoteViews getViewAt(int i) {
-
-        Log.d(TAG, "getViewAt: ");
 
         JSONObject obj = null;
         String ingredients = null;
@@ -77,49 +70,44 @@ public class BakingRemoteViewsFactory implements RemoteViewsService.RemoteViewsF
         try {
             obj = mRecipes.getJSONObject(i);
             ingredients = JSONUtils.getIngredientNamesFromJSON(obj);
-            name = obj.getString("name");
+            name = JSONUtils.getRecipesNameJSON(obj);
         } catch (JSONException e) {
             e.printStackTrace();
         }
-        Log.d(TAG, "getViewAt: " +name);
-        Log.d(TAG, "getViewAt: "+ ingredients);
 
         RemoteViews views =  new RemoteViews(mContext.getPackageName(),R.layout.widget_list_item);
-
         views.setTextViewText(R.id.tv_recipe_name, name);
         views.setTextViewText(R.id.tv_ingredients, ingredients);
-
 
         Bundle b = new Bundle();
         Intent intent = new Intent();
         intent.putExtras(b);
         views.setOnClickFillInIntent(R.id.ll_widget_list_item,intent);
         return views;
-
     }
 
     @Override
     public RemoteViews getLoadingView() {
-        Log.d(TAG, "getLoadingView: ");
+
         return null;
     }
 
     @Override
     public int getViewTypeCount() {
-        Log.d(TAG, "getViewTypeCount: ");
+
         return 1;
     }
 
     @Override
     public long getItemId(int i) {
-        Log.d(TAG, "getItemId: ");
+
         return i;
     }
 
     @Override
     public boolean hasStableIds() {
 
-        Log.d(TAG, "hasStableIds: ");
+
         return true;
     }
 }
