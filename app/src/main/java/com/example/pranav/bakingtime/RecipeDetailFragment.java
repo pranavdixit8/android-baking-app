@@ -10,6 +10,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
 import com.example.pranav.bakingtime.utils.JSONUtils;
 
@@ -41,16 +42,16 @@ public class RecipeDetailFragment extends Fragment implements RecipeDetailAdapte
 
     public RecipeDetailFragment(){}
 
-    void setOnStepClickListener(OnClickPassListener listener){
+    public void setOnStepClickListener(OnClickPassListener listener){
         mOnClickPassListener = listener;
     }
 
 
-    void setRecipeObject(JSONObject recipe){
+    public void setRecipeObject(JSONObject recipe){
         mRecipe = recipe;
     }
 
-    void setTwoPane(boolean isTwoPane){ mTwoPane = isTwoPane;}
+    public void setTwoPane(boolean isTwoPane){ mTwoPane = isTwoPane;}
 
 
 
@@ -60,7 +61,7 @@ public class RecipeDetailFragment extends Fragment implements RecipeDetailAdapte
 
         if(savedInstanceState!=null){
 
-           String jsonString = savedInstanceState.getString("jsonString");
+           String jsonString = savedInstanceState.getString(Recipe.JSON_STRING);
             try {
                 mRecipe = new JSONObject(jsonString);
             } catch (JSONException e) {
@@ -71,9 +72,10 @@ public class RecipeDetailFragment extends Fragment implements RecipeDetailAdapte
 
         String ingredients = null;
         String[] steps = null;
+        String name = null;
         try {
 
-            Log.d(TAG, "onCreate: " + mRecipe.getJSONArray("ingredients").getJSONObject(0).getString("ingredient"));
+            name = JSONUtils.getRecipesNameJSON(mRecipe);
             ingredients = JSONUtils.getIngredientsFromJSON(mRecipe);
             steps = JSONUtils.getStepsFromJSON(mRecipe);
         } catch (JSONException e) {
@@ -81,12 +83,12 @@ public class RecipeDetailFragment extends Fragment implements RecipeDetailAdapte
         }
 
 
-        Log.d(TAG, "onCreateView: " + steps[0]);
-
         final View rootView = inflater.inflate(R.layout.fragment_step_list, container, false);
 
 
+        TextView recipeNameTextView = rootView.findViewById(R.id.tv_recipe_name);
 
+        recipeNameTextView.setText(name);
         RecyclerView recyclerView = (RecyclerView) rootView.findViewById(R.id.recipe_step_list_recyclerview);
 
         RecipeDetailAdapter mAdapter = new RecipeDetailAdapter(ingredients,steps,mTwoPane, this);
@@ -104,7 +106,7 @@ public class RecipeDetailFragment extends Fragment implements RecipeDetailAdapte
 
     @Override
     public void onSaveInstanceState(Bundle outState) {
-        outState.putString("jsonString", mRecipe.toString());
+        outState.putString(Recipe.JSON_STRING, mRecipe.toString());
     }
 
     @Override
