@@ -38,7 +38,6 @@ public class RecipeDetailAdapter extends RecyclerView.Adapter<RecipeDetailAdapte
     public RecipeStepsViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         Context context = parent.getContext();
         LayoutInflater layoutInflater = LayoutInflater.from(context);
-
         View view  = layoutInflater.inflate(R.layout.recipe_steps_list_item,parent,false);
 
         RecipeStepsViewHolder viewHolder = new RecipeStepsViewHolder(view);
@@ -59,7 +58,7 @@ public class RecipeDetailAdapter extends RecyclerView.Adapter<RecipeDetailAdapte
         }
 
         if(position == 0) {
-            holder.mIngredientHead.setText("Ingredients:");
+            holder.mIngredientHead.setText(R.string.ingredients);
             holder.mIngredientHead.setTextSize(25);
             holder.mIngredientHead.setPadding(20, 0, 0, 20);
             holder.mIngredientHead.setVisibility(View.VISIBLE);
@@ -70,13 +69,16 @@ public class RecipeDetailAdapter extends RecyclerView.Adapter<RecipeDetailAdapte
             return;
         }
 
-
             holder.mIngredientHead.setVisibility(View.GONE);
             String step = mSteps[position - 1];
-            Log.d(TAG, "onBindViewHolder: " + step);
             holder.mStepTextView.setText(step);
-            holder.mCounterTextView.setText("" + position);
+            holder.mCounterTextView.setText("" + (position-1));
             holder.mCounterTextView.setVisibility(View.VISIBLE);
+
+        if(position==1){
+            holder.mCounterTextView.setVisibility(View.INVISIBLE);
+
+        }
 
 
     }
