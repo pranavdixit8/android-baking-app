@@ -13,6 +13,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.example.pranav.bakingtime.utils.JSONUtils;
@@ -28,6 +29,7 @@ import com.google.android.exoplayer2.trackselection.TrackSelector;
 import com.google.android.exoplayer2.ui.SimpleExoPlayerView;
 import com.google.android.exoplayer2.upstream.DefaultDataSourceFactory;
 import com.google.android.exoplayer2.util.Util;
+import com.squareup.picasso.Picasso;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -48,6 +50,7 @@ public class RecipeStepFragment extends android.support.v4.app.Fragment {
     private boolean mTwoPane;
     private SimpleExoPlayer mPlayer;
     private SimpleExoPlayerView mPlayerView;
+    private ImageView mVideoThumbnail;
 
     OnButtonClickListener mButtonCallBack;
 
@@ -73,6 +76,7 @@ public class RecipeStepFragment extends android.support.v4.app.Fragment {
         }
 
         mPlayerView = rootView.findViewById(R.id.sepv_media_player);
+        mVideoThumbnail = rootView.findViewById(R.id.iv_video_thimbnail);
         TextView stepTextView = rootView.findViewById(R.id.tv_single_step_detail);
         Button button = rootView.findViewById(R.id.button_next_step);
 
@@ -92,7 +96,14 @@ public class RecipeStepFragment extends android.support.v4.app.Fragment {
 
         stepTextView.setText(description);
 
-        setExoplayer(videoUrl,thumbnailUrl);
+        if(videoUrl==null|| videoUrl.isEmpty()){
+            setVideoThumbnail(thumbnailUrl);
+        }else {
+
+            setExoplayer(videoUrl);
+        }
+
+
 
         if(getResources().getConfiguration().orientation == ORIENTATION_LANDSCAPE && mTwoPane == false ){
             ConstraintLayout.LayoutParams params = (ConstraintLayout.LayoutParams) mPlayerView.getLayoutParams();
@@ -117,15 +128,17 @@ public class RecipeStepFragment extends android.support.v4.app.Fragment {
         return rootView;
     }
 
-    private void setExoplayer(String videoUrl, String thumbnailUrl) {
-
-        String stringUrl=(videoUrl.isEmpty() || videoUrl == null)?thumbnailUrl:videoUrl;
-
-        if(stringUrl.isEmpty() || stringUrl ==null){
+    private void setVideoThumbnail(String thumbnailUrl) {
+        if(thumbnailUrl==null || thumbnailUrl.isEmpty()){
             return;
         }
+        Picasso.with(mVideoThumbnail.getContext()).load(thumbnailUrl).into(mVideoThumbnail);
+    }
 
-        Uri uri = Uri.parse(stringUrl);
+    private void setExoplayer(String videoUrl) {
+
+
+        Uri uri = Uri.parse(videoUrl);
 
         if (mPlayer == null) {
 
