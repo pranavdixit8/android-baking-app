@@ -83,9 +83,8 @@ public class Recipe extends AppCompatActivity implements LoaderManager.LoaderCal
 
             @Override
             public JSONArray loadInBackground() {
-                URL url = NetworkUtils.buildURL();
                 try {
-                    String jsonResponse = NetworkUtils.getResponseFromAPI(url);
+                    String jsonResponse = NetworkUtils.getResponseFromAPI(NetworkUtils.FULL_URL);
                     JSONArray recipeArray = JSONUtils.getRecipeDetails(jsonResponse);
                     return recipeArray;
                 } catch (Exception e) {
