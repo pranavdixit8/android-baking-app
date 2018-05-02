@@ -23,6 +23,8 @@ public class RecipeStepDetail extends AppCompatActivity implements RecipeStepFra
 
         Intent intent =getIntent();
 
+        if(savedInstanceState==null){
+
         if(intent!=null) {
 
             String jsonString = intent.getStringExtra(Recipe.JSON_STRING);
@@ -47,6 +49,7 @@ public class RecipeStepDetail extends AppCompatActivity implements RecipeStepFra
                     .commit();
 
         }
+    }
     }
 
     @Override
