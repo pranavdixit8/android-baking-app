@@ -3,4 +3,21 @@
     <string name="appwidget_text">EXAMPLE</string>
     <string name="add_widget">Add widget</string>
     <string name="ingredients">Ingredients:</string>
+    <string name="action_settings">Settings</string>
+    <string name="recipe_key">Recipe</string>
+    <string name="recipe_label">Widget Recipe</string>
+
+
+
+    <string name="brownies">Brownies</string>
+    <string name="nutella">Nutella Pie</string>
+    <string name="yellowCake">Yellow Cake</string>
+    <string name="cheeseCake">Cheese Cake</string>
+    <string name="nutella_value">0</string>
+    <string name="brownies_value">1</string>
+    <string name="yellowCake_value">2</string>
+    <string name="cheeseCake_value">3</string>
+    <string name="recipe_default_value">0</string>
+
+
 </resources>

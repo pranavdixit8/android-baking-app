@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    
+    <array name="pref_recipe_labels">
+        <item>@string/nutella</item>
+        <item>@string/brownies</item>
+        <item>@string/yellowCake</item>
+        <item>@string/cheeseCake</item>
+    </array>
+
+    <array name="pref_recipe_values">
+
+        <item>@string/nutella_value</item>
+        <item>@string/brownies_value</item>
+        <item>@string/yellowCake_value</item>
+        <item>@string/cheeseCake_value</item>
+
+    </array>
+
+</resources>
