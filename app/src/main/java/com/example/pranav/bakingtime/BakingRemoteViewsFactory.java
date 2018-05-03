@@ -62,11 +62,13 @@ public class BakingRemoteViewsFactory implements RemoteViewsService.RemoteViewsF
     public RemoteViews getViewAt(int i) {
 
         JSONObject obj = null;
+        String jsonString = null;
         String ingredients = null;
         String name = null;
 
         try {
             obj = mRecipes.getJSONObject(i);
+            jsonString = obj.toString();
             ingredients = JSONUtils.getIngredientNamesFromJSON(obj);
             name = JSONUtils.getRecipesNameJSON(obj);
         } catch (JSONException e) {
@@ -78,6 +80,7 @@ public class BakingRemoteViewsFactory implements RemoteViewsService.RemoteViewsF
         views.setTextViewText(R.id.tv_ingredients, ingredients);
 
         Bundle b = new Bundle();
+        b.putString(Recipe.JSON_STRING, jsonString);
         Intent intent = new Intent();
         intent.putExtras(b);
         views.setOnClickFillInIntent(R.id.ll_widget_list_item,intent);
