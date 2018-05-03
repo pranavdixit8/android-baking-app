@@ -20,11 +20,13 @@ public class BakingRemoteViewsFactory implements RemoteViewsService.RemoteViewsF
     
     private static final String TAG = BakingRemoteViewsFactory.class.getSimpleName();
 
-    private JSONArray mRecipes;
+    private JSONObject mRecipe;
     private Context mContext;
+    private int mIndex;
 
-    public BakingRemoteViewsFactory(Context context){
+    public BakingRemoteViewsFactory(Context context, int index){
         mContext = context;
+        mIndex = index;
     }
 
     @Override
@@ -38,10 +40,10 @@ public class BakingRemoteViewsFactory implements RemoteViewsService.RemoteViewsF
         try {
             String jsonResponse = NetworkUtils.getResponseFromAPI(NetworkUtils.FULL_URL);
             JSONArray recipeArray = JSONUtils.getRecipeDetails(jsonResponse);
-            mRecipes =  recipeArray;
+            mRecipe =  recipeArray.getJSONObject(mIndex);
         } catch (Exception e) {
             e.printStackTrace();
-            mRecipes =  null;
+            mRecipe =  null;
         }
 
     }
@@ -54,8 +56,8 @@ public class BakingRemoteViewsFactory implements RemoteViewsService.RemoteViewsF
 
     @Override
     public int getCount() {
-        if(mRecipes==null)return 0;
-        return mRecipes.length();
+        if(mRecipe==null)return 0;
+        return 1;
     }
 
     @Override
@@ -67,10 +69,9 @@ public class BakingRemoteViewsFactory implements RemoteViewsService.RemoteViewsF
         String name = null;
 
         try {
-            obj = mRecipes.getJSONObject(i);
-            jsonString = obj.toString();
-            ingredients = JSONUtils.getIngredientNamesFromJSON(obj);
-            name = JSONUtils.getRecipesNameJSON(obj);
+            jsonString = mRecipe.toString();
+            ingredients = JSONUtils.getIngredientNamesFromJSON(mRecipe);
+            name = JSONUtils.getRecipesNameJSON(mRecipe);
         } catch (JSONException e) {
             e.printStackTrace();
         }

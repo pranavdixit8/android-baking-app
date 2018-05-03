@@ -3,9 +3,12 @@ package com.example.pranav.bakingtime;
 import android.app.PendingIntent;
 import android.appwidget.AppWidgetManager;
 import android.appwidget.AppWidgetProvider;
+import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
+import android.util.Log;
 import android.widget.RemoteViews;
 
 /**
@@ -13,13 +16,26 @@ import android.widget.RemoteViews;
  */
 public class BakingAppWidget extends AppWidgetProvider {
 
+    public static final String INDEX_KEY = "Index";
+
+    public static final String TAG = BakingAppWidget.class.getSimpleName();
+
+    private static int mIndex;
+
+//    private static Intent mIntent = null;
+
     static void updateAppWidget(Context context, AppWidgetManager appWidgetManager,
                                 int appWidgetId) {
 
         CharSequence widgetText = context.getString(R.string.appwidget_text);
         // Construct the RemoteViews object
         RemoteViews views = new RemoteViews(context.getPackageName(), R.layout.baking_app_widget);
+
         Intent intent = new Intent(context, BakingRemoteViewsService.class);
+        intent.putExtra(INDEX_KEY, mIndex);
+
+        intent.setData(Uri.parse(intent.toUri(Intent.URI_INTENT_SCHEME)));
+
         views.setRemoteAdapter(R.id.widget_listview,intent);
 
 
@@ -49,6 +65,27 @@ public class BakingAppWidget extends AppWidgetProvider {
             updateAppWidget(context, appWidgetManager, appWidgetId);
             appWidgetManager.notifyAppWidgetViewDataChanged(appWidgetId,R.id.widget_listview);
         }
+    }
+
+    public static void sendRefreshAction(Context context, int index) {
+        Intent intent = new Intent(AppWidgetManager.ACTION_APPWIDGET_UPDATE);
+        intent.putExtra(INDEX_KEY, index);
+        intent.setComponent(new ComponentName(context, BakingAppWidget.class));
+        context.sendBroadcast(intent);
+    }
+
+    @Override
+    public void onReceive(Context context, Intent intent) {
+        final String action = intent.getAction();
+        mIndex = intent.getIntExtra(INDEX_KEY,0);
+
+        if (action.equals(AppWidgetManager.ACTION_APPWIDGET_UPDATE)) {
+            AppWidgetManager appWidgetManager = AppWidgetManager.getInstance(context);
+            ComponentName componentName = new ComponentName(context, BakingAppWidget.class);
+            onUpdate(context,appWidgetManager,appWidgetManager.getAppWidgetIds(componentName));
+
+        }
+        super.onReceive(context, intent);
     }
 
     @Override
