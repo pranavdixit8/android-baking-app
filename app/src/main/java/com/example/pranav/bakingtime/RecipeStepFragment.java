@@ -49,6 +49,7 @@ public class RecipeStepFragment extends android.support.v4.app.Fragment {
     private static final String THUMBNAIL_URL_KEY = "thumbnailURL";
     private static final String APPLICATION_NAME = "BakingTime";
     public static final String PLAYER_POSITION_KEY = "playerPosition";
+    private static final String PLAYER_STATE_KEY = "playerState" ;
 
     int mStepNumber;
     private JSONObject mRecipe;
@@ -57,6 +58,7 @@ public class RecipeStepFragment extends android.support.v4.app.Fragment {
     private SimpleExoPlayerView mPlayerView;
     private ImageView mVideoThumbnail;
     private long mPlayerPosition;
+    private boolean mPlayerState = true;
 
     private FrameLayout mFrameLayout;
 
@@ -82,6 +84,7 @@ public class RecipeStepFragment extends android.support.v4.app.Fragment {
             }
             mTwoPane = savedInstanceState.getBoolean(IS_TWO_PANE);
             mPlayerPosition = savedInstanceState.getLong(PLAYER_POSITION_KEY);
+            mPlayerState = savedInstanceState.getBoolean(PLAYER_STATE_KEY);
 
         }
 
@@ -170,7 +173,7 @@ public class RecipeStepFragment extends android.support.v4.app.Fragment {
 
             mPlayer.seekTo(mPlayerPosition);
             mPlayer.prepare(mediaSource);
-            mPlayer.setPlayWhenReady(true);
+            mPlayer.setPlayWhenReady(mPlayerState);
 
         }
 
@@ -194,16 +197,18 @@ public class RecipeStepFragment extends android.support.v4.app.Fragment {
         outState.putInt(RecipeDetail.STEP_NUMBER, mStepNumber);
         outState.putBoolean(IS_TWO_PANE, mTwoPane);
         outState.putLong(PLAYER_POSITION_KEY, mPlayerPosition);
+        outState.putBoolean(PLAYER_STATE_KEY,mPlayerState);
     }
 
     @Override
     public void onPause() {
         super.onPause();
-        mPlayerPosition = mPlayer.getCurrentPosition();
         if(mPlayer!=null){
-        mPlayer.stop();
-        mPlayer.release();
-        mPlayer = null;
+            mPlayerPosition = mPlayer.getCurrentPosition();
+            mPlayerState = mPlayer.getPlayWhenReady();
+            mPlayer.stop();
+            mPlayer.release();
+            mPlayer = null;
     }
     }
 
