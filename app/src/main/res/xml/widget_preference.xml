@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
     <ListPreference
-        android:defaultValue="Nutella"
+        android:defaultValue="@string/recipe_default_value"
         android:entries="@array/pref_recipe_labels"
         android:entryValues="@array/pref_recipe_values"
         android:key = "@string/recipe_key"
