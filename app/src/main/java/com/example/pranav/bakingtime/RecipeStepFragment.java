@@ -1,6 +1,7 @@
 package com.example.pranav.bakingtime;
 
 
+import android.content.Context;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
@@ -146,6 +147,16 @@ public class RecipeStepFragment extends android.support.v4.app.Fragment {
 
 
         return rootView;
+    }
+
+    @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+        try {
+            mButtonCallBack = (OnButtonClickListener) context;
+        } catch (ClassCastException e) {
+            throw new ClassCastException(context.toString() + " should implement OnButtonClickListener");
+        }
     }
 
     private void setVideoThumbnail(String thumbnailUrl) {

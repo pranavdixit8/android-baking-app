@@ -23,7 +23,6 @@ public class RecipeStepDetail extends AppCompatActivity implements RecipeStepFra
 
         Intent intent =getIntent();
 
-        if(savedInstanceState==null){
 
         if(intent!=null) {
 
@@ -36,6 +35,8 @@ public class RecipeStepDetail extends AppCompatActivity implements RecipeStepFra
             } catch (JSONException e) {
                 e.printStackTrace();
             }
+
+            if(savedInstanceState==null){
 
             RecipeStepFragment fragment = new RecipeStepFragment();
             fragment.setRecipeObject(mRecipeObject);
